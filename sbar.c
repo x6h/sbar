@@ -31,11 +31,14 @@ int main()
 
     /* allocate memory for each modules saved value */
     for (int k = 0; k < ARRAY_SIZE(modules); ++k)
-        modules[k].saved_value = (char*)calloc(1, MAX_MODULE_LENGTH);
+        modules[k].saved_value = (char*)calloc(MAX_MODULE_LENGTH, sizeof(char));
+
+    char* status = (char*)calloc(1, sizeof(char));
 
     for (unsigned int i = 1; ; ++i)
     {
-        char status[256] = "";
+        /* 'clear' the status */
+        status[0] = '\0';
 
         for (int k = 0; k < ARRAY_SIZE(modules); ++k)
         {
@@ -45,6 +48,10 @@ int main()
                 modules[k].saved_value = modules[k].function(modules[k].arguments);
                 strcpy(modules[k].saved_value, modules[k].function(modules[k].arguments));
             }
+
+            /* allocate more memory for status if the status length + a modules saved value overflows the buffer */
+            if (strlen(status) + strlen(modules[k].saved_value) > strlen(status))
+                status = realloc(status, strlen(status) + strlen(modules[k].saved_value) + 1);
 
             /* append each modules saved value to the status string */
             strcat(status, modules[k].saved_value);

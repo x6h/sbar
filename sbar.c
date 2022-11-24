@@ -8,14 +8,6 @@
 
 #define ARRAY_SIZE(x) sizeof(x) / sizeof(*x)
 
-struct c_module
-{
-    int update_time;
-    char* (*function)(struct c_arguments arguments);
-    struct c_arguments arguments;
-    char* saved_value;
-};
-
 #include "config.h"
 
 int main()
@@ -30,17 +22,18 @@ int main()
     }
 
     /* allocate memory for each modules saved value */
-    for (int k = 0; k < ARRAY_SIZE(modules); ++k)
+    for (unsigned int k = 0; k < ARRAY_SIZE(modules); ++k)
         modules[k].saved_value = (char*)calloc(MAX_MODULE_LENGTH, sizeof(char));
 
-    char* status = (char*)calloc(1, sizeof(char));
+    unsigned int bytes_allocated = 1;
+    char* status = (char*)calloc(bytes_allocated, sizeof(char));
 
     for (unsigned int i = 1; ; ++i)
     {
         /* 'clear' the status */
         status[0] = '\0';
 
-        for (int k = 0; k < ARRAY_SIZE(modules); ++k)
+        for (unsigned int k = 0; k < ARRAY_SIZE(modules); ++k)
         {
             /* update the modules saved value if the update time has passed */
             if (i % modules[k].update_time == 0)
@@ -51,18 +44,29 @@ int main()
 
             /* allocate more memory for status if the status length + a modules saved value overflows the buffer */
             if (strlen(status) + strlen(modules[k].saved_value) > strlen(status))
-                status = realloc(status, strlen(status) + strlen(modules[k].saved_value) + 1);
+            {
+                bytes_allocated = strlen(status) + strlen(modules[k].saved_value) + 1;
+                status = realloc(status, bytes_allocated);
+            }
 
             /* append each modules saved value to the status string */
             strcat(status, modules[k].saved_value);
 
             /* add delimiters between each saved value */
             if (k != ARRAY_SIZE(modules) - 1)
+            {
+                if (bytes_allocated < strlen(status) + strlen(delimiter))
+                {
+                    bytes_allocated = strlen(status) + strlen(delimiter) + 1;
+                    status = realloc(status, bytes_allocated);
+                }
+
                 strcat(status, delimiter);
+            }
         }
 
         /* lowercase status text (remove if you prefer otherwise) */
-        for (int i = 0; i < strlen(status); ++i)
+        for (unsigned int i = 0; i < strlen(status); ++i)
             status[i] = tolower(status[i]);
 
         /* set the root window name as the status (dwm defaults to using it as the bars status text) */

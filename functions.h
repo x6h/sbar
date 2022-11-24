@@ -3,6 +3,7 @@
 
 extern char bar_date[MAX_MODULE_LENGTH];
 extern char bar_time[MAX_MODULE_LENGTH];
+extern char bar_network_speed[MAX_MODULE_LENGTH];
 
 struct c_arguments
 {
@@ -12,3 +13,4 @@ struct c_arguments
 
 char* get_time(struct c_arguments arguments);
 char* get_date(struct c_arguments arguments);
+char* get_network_speed(struct c_arguments arguments);

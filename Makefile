@@ -1,5 +1,5 @@
 cc = gcc
-cflags = -std=c99 -Wall -Wextra -Wpedantic -lX11
+cflags = -std=c99 -Wall -Wextra -Wpedantic -lX11 -g
 objs = sbar.o functions.o
 install_directory = /usr/local/bin
 

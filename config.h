@@ -20,7 +20,7 @@ static struct c_module modules[] = {
      * get_time: '.string' is the strftime format (for help, run: 'man strftime')
      * get_date: same as above)
      */
-    //{ 1, get_network_speed, { .string = "eth0" } },
+    { 1, get_network_speed, { .string = "eth0" } },
     { 1, get_date, { .string = "%A %d/%m" } },
     { 1, get_time, { .string = "%H:%M" } }
 };

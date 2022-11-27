@@ -62,7 +62,7 @@ char* get_network_speed(struct c_arguments arguments)
         fscanf(rx_bytes_file, "%lu", &rx_bytes);
         fscanf(tx_bytes_file, "%lu", &tx_bytes);
 
-        snprintf(bar_network_speed, MAX_MODULE_LENGTH, "rx: %lu | oldrx: %lu | tx: %lu", rx_bytes, old_rx_bytes, tx_bytes);
+        snprintf(bar_network_speed, MAX_MODULE_LENGTH, "rx: %lu | tx: %lu", rx_bytes - old_rx_bytes, tx_bytes - old_tx_bytes);
 
         old_rx_bytes = rx_bytes;
         old_tx_bytes = tx_bytes;

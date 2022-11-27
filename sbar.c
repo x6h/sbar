@@ -21,12 +21,8 @@ int main()
         exit(1);
     }
 
-    /* allocate memory for each modules saved value */
-    for (unsigned int k = 0; k < ARRAY_SIZE(modules); ++k)
-        modules[k].saved_value = (char*)calloc(MAX_MODULE_LENGTH, sizeof(char));
-
-    unsigned int bytes_allocated = 1;
-    char* status = (char*)calloc(bytes_allocated, sizeof(char));
+    unsigned int status_size = 1;
+    char* status = (char*)calloc(status_size, sizeof(char));
 
     for (unsigned int i = 1; ; ++i)
     {
@@ -37,16 +33,14 @@ int main()
         {
             /* update the modules saved value if the update time has passed */
             if (i % modules[k].update_time == 0)
-            {
                 modules[k].saved_value = modules[k].function(modules[k].arguments);
-                strcpy(modules[k].saved_value, modules[k].function(modules[k].arguments));
-            }
 
-            /* allocate more memory for status if the status length + a modules saved value overflows the buffer */
-            if (strlen(status) + strlen(modules[k].saved_value) > strlen(status))
+            /* allocate more memory for the status if an overflow will occur */
+            if (strlen(status) + strlen(modules[k].saved_value) + 1 > status_size)
             {
-                bytes_allocated = strlen(status) + strlen(modules[k].saved_value) + 1;
-                status = realloc(status, bytes_allocated);
+                /* set the status size as the length of the current status + the length of the modules saved value + null terminator */
+                status_size = strlen(status) + strlen(modules[k].saved_value) + 1;
+                status = realloc(status, status_size);
             }
 
             /* append each modules saved value to the status string */
@@ -55,10 +49,12 @@ int main()
             /* add delimiters between each saved value */
             if (k != ARRAY_SIZE(modules) - 1)
             {
-                if (bytes_allocated < strlen(status) + strlen(delimiter))
+                /* allocate more memory for the status if an overflow will occur */
+                if (strlen(status) + strlen(delimiter) + 1 > status_size)
                 {
-                    bytes_allocated = strlen(status) + strlen(delimiter) + 1;
-                    status = realloc(status, bytes_allocated);
+                    /* set the status size as the length of the current status + length of the delimiter text + null terminator */
+                    status_size = strlen(status) + strlen(delimiter) + 1;
+                    status = realloc(status, status_size);
                 }
 
                 strcat(status, delimiter);
@@ -77,5 +73,6 @@ int main()
         sleep(1);
     }
 
+    free(status);
     return 0;
 }

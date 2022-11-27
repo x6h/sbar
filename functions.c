@@ -7,7 +7,7 @@ char bar_date[MAX_MODULE_LENGTH] = "";
 char bar_time[MAX_MODULE_LENGTH] = "";
 char bar_network_speed[MAX_MODULE_LENGTH] = "";
 
-char* get_time(struct c_arguments arguments)
+char* get_datetime(struct c_arguments arguments)
 {
     time_t unix_time = time(NULL);
     struct tm* local_time = localtime(&unix_time);
@@ -18,19 +18,6 @@ char* get_time(struct c_arguments arguments)
         snprintf(bar_time, MAX_MODULE_LENGTH, "n/a");
 
     return bar_time;
-}
-
-char* get_date(struct c_arguments arguments)
-{
-    time_t unix_time = time(NULL);
-    struct tm* local_time = localtime(&unix_time);
-
-    if (unix_time != -1 && local_time)
-        strftime(bar_date, MAX_MODULE_LENGTH, arguments.string, local_time);
-    else
-        snprintf(bar_date, MAX_MODULE_LENGTH, "n/a");
-
-    return bar_date;
 }
 
 char* get_network_speed(struct c_arguments arguments)

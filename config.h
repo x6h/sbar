@@ -13,14 +13,14 @@ static const char* delimiter = " | ";
 
 static struct c_module modules[] = {
     /*
-     * update time, function, { .argument = value }
+     * { update time, function, { .argument = value } }
      * view the c_arguments implementation in functions.h if you need more information
      *
      * function help:
-     * get_time: '.string' is the strftime format (for help, run: 'man strftime')
-     * get_date: same as above)
+     * get_time:            argument .string = "strftime() format" (for help, run: 'man strftime')
+     * get_date:            argument .string = "strftime() format" (for help, run: 'man strftime')
+     * get_network_speed:   argument .string = "network interface name" (eg. eth0)
      */
-    { 1, get_network_speed, { .string = "eth0" } },
-    { 1, get_date, { .string = "%A %d/%m" } },
-    { 1, get_time, { .string = "%H:%M" } }
+    //{ 1, get_network_speed, { .string = "eth0" } },
+    { 1, get_datetime, { .string = "%A %d/%m | %H:%M" } },
 };

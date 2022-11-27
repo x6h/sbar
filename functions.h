@@ -11,6 +11,5 @@ struct c_arguments
     char** string_array;
 };
 
-char* get_time(struct c_arguments arguments);
-char* get_date(struct c_arguments arguments);
+char* get_datetime(struct c_arguments arguments);
 char* get_network_speed(struct c_arguments arguments);
